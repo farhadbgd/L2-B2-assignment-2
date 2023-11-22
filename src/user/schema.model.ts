@@ -12,20 +12,18 @@ const UserSchema = new Schema<User>({
   age: { type: Number },
   email: { type: String },
   isActive: { type: Boolean },
-  hobbies: [[String]], // Need to check how to declare array of string.
+  hobbies: [String], // Need to check how to declare array of string.
   address: {
     street: { type: String },
     city: { type: String },
     country: { type: String },
   },
   orders: [
-    [
-      {
-        productName: { type: String },
-        price: { type: String },
-        quantity: { type: String },
-      },
-    ],
+    {
+      productName: { type: String },
+      price: { type: String },
+      quantity: { type: String },
+    },
   ], // Need to check how to declare array of object.
 });
 
