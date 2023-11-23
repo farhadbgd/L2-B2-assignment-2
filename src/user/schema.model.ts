@@ -2,21 +2,21 @@ import { Schema, model } from 'mongoose';
 import { User } from './user.interface';
 
 const UserSchema = new Schema<User>({
-  userId: { type: Number },
-  username: { type: String },
-  password: { type: String },
+  userId: { type: Number, required: true, unique: true },
+  username: { type: String, required: true },
+  password: { type: String, required: true },
   fullName: {
-    firstName: { type: String },
-    lastName: { type: String },
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
   },
-  age: { type: Number },
-  email: { type: String },
-  isActive: { type: Boolean },
+  age: { type: Number, required: true },
+  email: { type: String, required: true },
+  isActive: { type: Boolean, required: true },
   hobbies: [String], // Need to check how to declare array of string.
   address: {
-    street: { type: String },
-    city: { type: String },
-    country: { type: String },
+    street: { type: String, required: true },
+    city: { type: String, required: true },
+    country: { type: String, required: true },
   },
   orders: [
     {
