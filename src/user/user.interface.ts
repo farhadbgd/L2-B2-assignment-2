@@ -1,3 +1,5 @@
+import { Model } from 'mongoose';
+
 export type User = {
   userId: number;
   username: string;
@@ -23,3 +25,15 @@ export type User = {
     },
   ];
 };
+
+// instance method
+export type UserInstanceMethod = {
+  // eslint-disable-next-line no-unused-vars
+  isExists(id: number): Promise<User | null>;
+};
+
+export type UserInstanceMethodModel = Model<
+  User,
+  Record<string, never>,
+  UserInstanceMethod
+>;

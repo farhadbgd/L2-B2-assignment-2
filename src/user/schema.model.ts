@@ -1,7 +1,17 @@
 import { Schema, model } from 'mongoose';
-import { User } from './user.interface';
-
-const UserSchema = new Schema<User>({
+import {
+  User,
+  UserInstanceMethod,
+  UserInstanceMethodModel,
+} from './user.interface';
+import bcrypt from 'bcrypt';
+import config from '../app/config';
+const saltRounds = 10;
+const UserSchema = new Schema<
+  User,
+  UserInstanceMethodModel,
+  UserInstanceMethod
+>({
   userId: { type: Number, required: true, unique: true },
   username: { type: String, required: true },
   password: { type: String, required: true },
@@ -27,4 +37,25 @@ const UserSchema = new Schema<User>({
   ], // Need to check how to declare array of object.
 });
 
-export const UserModel = model('Users', UserSchema);
+// bcrypt pre midleware
+UserSchema.pre('save', async function () {
+  // eslint-disable-next-line @typescript-eslint/no-this-alias
+  const user = this;
+  user.password = await bcrypt.hash(user.password, saltRounds);
+});
+
+// mongoose post midleware/hook
+// UserSchema.post('save', function (doc, next) {
+//   doc.password = '';
+//   next();
+// });
+
+UserSchema.methods.isExists = async function (id: number) {
+  const existingUser = await UserModel.findOne({ userId: id });
+  return existingUser;
+};
+
+export const UserModel = model<User, UserInstanceMethodModel>(
+  'Users',
+  UserSchema,
+);
