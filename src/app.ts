@@ -41,3 +41,20 @@ export default app;
 //   "price": 15,
 //   "quantity": 20
 // }
+
+// if (result?._id) {
+//   res.status(200).json({
+//     success: true,
+//     message: 'Order created successfully!',
+//     data: null,
+//   });
+// } else {
+//   res.status(500).json({
+//     success: false,
+//     message: 'User not found',
+//     error: {
+//       code: 404,
+//       description: 'User not found!',
+//     },
+//   });
+// }

@@ -60,21 +60,38 @@ const deleteSingleUserfromDb = async (Id: number) => {
 };
 
 const createOrderInUser = async (Id: number, Order: object) => {
-  const result = await UserModel.findOneAndUpdate(
-    { userId: Id },
-    {
-      $push: {
-        orders: Order,
+  const createAOrder = new UserModel();
+  if (!(await createAOrder.isExists(Id))) {
+    throw new Error('User not found');
+  } else {
+    const result = await UserModel.findOneAndUpdate(
+      { userId: Id },
+      {
+        $push: {
+          orders: Order,
+        },
       },
-    },
-    {
-      new: true,
-    },
-  ).select(['orders', '']);
-  return result;
+      {
+        new: true,
+      },
+    ).select(['orders', '']);
+    return result;
+  }
 };
 
 const getAllOrdersfromDb = async (Id: number) => {
+  const createAOrder = new UserModel();
+  if (!(await createAOrder.isExists(Id))) {
+    throw new Error('User not found');
+  } else {
+    const result = await UserModel.findOne({ userId: Id }).select([
+      'orders',
+      '-_id',
+    ]);
+    return result;
+  }
+
+  //
   const result = await UserModel.findOne({ userId: Id }).select([
     'orders',
     '-_id',

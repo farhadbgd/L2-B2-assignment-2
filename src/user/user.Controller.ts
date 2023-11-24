@@ -13,6 +13,10 @@ const createUser = async (req: Request, res: Response) => {
     });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
+    if (error instanceof z.ZodError) {
+      res.send({ error });
+      return;
+    }
     res.status(500).json({
       success: false,
       message: error.message || 'User not found',
@@ -140,27 +144,20 @@ const createOrder = async (req: Request, res: Response) => {
   try {
     const Id = parseInt(req.params.userId);
     const Order = req.body;
-    const result = await userService.createOrderInUser(Id, Order);
-    if (result?._id) {
-      res.status(200).json({
-        success: true,
-        message: 'Order created successfully!',
-        data: null,
-      });
-    } else {
-      res.status(500).json({
-        success: false,
-        message: 'User not found',
-        error: {
-          code: 404,
-          description: 'User not found!',
-        },
-      });
-    }
+    await userService.createOrderInUser(Id, Order);
+    res.status(200).json({
+      success: true,
+      message: 'Order created successfully!',
+      data: null,
+    });
   } catch (error: any) {
     res.status(500).json({
       success: false,
-      message: error.message || 'User not found',
+      message: 'User not found',
+      error: {
+        code: 404,
+        description: error.message,
+      },
     });
   }
 };
@@ -169,30 +166,18 @@ const getAllOrders = async (req: Request, res: Response) => {
   try {
     const Id = parseInt(req.params.userId);
     const result = await userService.getAllOrdersfromDb(Id);
-
-    if (result === null) {
-      res.status(200).json({
-        success: false,
-        message: 'User not found',
-        error: {
-          code: 404,
-          description: 'User not found!',
-        },
-      });
-    } else {
-      res.status(200).json({
-        success: true,
-        message: 'Order fetched successfully!',
-        data: result,
-      });
-    }
+    res.status(200).json({
+      success: true,
+      message: 'Order fetched successfully!',
+      data: result,
+    });
   } catch (error: any) {
     res.status(500).json({
       success: false,
       message: 'User not found',
       error: {
         code: 404,
-        description: 'User not found!',
+        description: error.message,
       },
     });
   }
