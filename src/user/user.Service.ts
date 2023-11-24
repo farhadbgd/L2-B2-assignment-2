@@ -55,14 +55,6 @@ const deleteSingleUserfromDb = async (Id: number) => {
 };
 
 const createOrderInUser = async (Id: number, Order: object) => {
-  // const getUser = await UserModel.find({
-  //   $and: [{ userId: Id }, { orders: { $exists: true } }],
-  // });
-  // const docs = await getUser.aggregate([{ $match: { 'name.last': 'Ghost' } }]);
-  // console.log(getUser);
-  // const checkOrder = { orders: { $exists: true } };
-
-  // console.log(checkOrder);
   const result = await UserModel.findOneAndUpdate(
     { userId: Id },
     {
@@ -73,9 +65,9 @@ const createOrderInUser = async (Id: number, Order: object) => {
     {
       new: true,
     },
-  );
+  ).select(['orders', '']);
   return result;
-
+  // .select(['orders', 'orders[-_id]']);
   // const result = await UserModel.create(user);
 
   // console.log('Start');

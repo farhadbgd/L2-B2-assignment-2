@@ -3,13 +3,14 @@ import { userService } from './user.Service';
 
 const createUser = async (req: Request, res: Response) => {
   try {
-    const { user } = req.body;
+    const user = req.body;
     const result = await userService.createUserIntoDb(user);
     res.status(200).json({
       success: true,
       message: 'User created successfully!',
       data: result,
     });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     res.status(500).json({
       success: false,
@@ -108,7 +109,7 @@ const createOrder = async (req: Request, res: Response) => {
     res.status(200).json({
       success: true,
       message: 'Order created successfully!',
-      data: null,
+      data: result,
     });
   } catch (error: any) {
     res.status(500).json({

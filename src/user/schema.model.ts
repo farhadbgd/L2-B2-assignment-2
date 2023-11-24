@@ -33,9 +33,18 @@ const UserSchema = new Schema<
       productName: { type: String },
       price: { type: String },
       quantity: { type: String },
+      _id: false,
     },
   ], // Need to check how to declare array of object.
 });
+
+UserSchema.methods.toJSON = function () {
+  const obj = this.toObject();
+  delete obj.password;
+  delete obj._id;
+  delete obj.__v;
+  return obj;
+};
 
 // bcrypt pre midleware
 UserSchema.pre('save', async function () {
@@ -44,9 +53,10 @@ UserSchema.pre('save', async function () {
   user.password = await bcrypt.hash(user.password, saltRounds);
 });
 
-// mongoose post midleware/hook
+// // post midleware
 // UserSchema.post('save', function (doc, next) {
-//   doc.password = '';
+//   doc.password = false;
+//   // onde
 //   next();
 // });
 
