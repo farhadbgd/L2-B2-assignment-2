@@ -5,7 +5,7 @@ import {
   UserInstanceMethodModel,
 } from './user.interface';
 import bcrypt from 'bcrypt';
-import config from '../app/config';
+
 const saltRounds = 10;
 const UserSchema = new Schema<
   User,
@@ -43,9 +43,16 @@ UserSchema.methods.toJSON = function () {
   delete obj.password;
   delete obj._id;
   delete obj.__v;
+  // delete obj.orders;
   return obj;
 };
 
+// bcrypt pre midleware
+UserSchema.pre('save', async function () {
+  // eslint-disable-next-line @typescript-eslint/no-this-alias
+  const user = this;
+  user.password = await bcrypt.hash(user.password, saltRounds);
+});
 // bcrypt pre midleware
 UserSchema.pre('save', async function () {
   // eslint-disable-next-line @typescript-eslint/no-this-alias

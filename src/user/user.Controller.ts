@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { userService } from './user.Service';
+import { z } from 'zod';
 
 const createUser = async (req: Request, res: Response) => {
   try {
@@ -42,11 +43,22 @@ const getSingleUser = async (req: Request, res: Response) => {
   try {
     const Id = parseInt(req.params.userId);
     const result = await userService.getSingleUserfromDb(Id);
-    res.status(200).json({
-      success: true,
-      message: 'User fetched successfully!',
-      data: result,
-    });
+    if (result === null) {
+      res.status(200).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    } else {
+      res.status(200).json({
+        success: true,
+        message: 'User fetched successfully!',
+        data: result,
+      });
+    }
   } catch (error: any) {
     res.status(500).json({
       success: false,
@@ -62,13 +74,24 @@ const getSingleUser = async (req: Request, res: Response) => {
 const updateSingleUser = async (req: Request, res: Response) => {
   try {
     const Id = parseInt(req.params.userId);
-    const user = req.body.user;
+    const user = req.body;
     const result = await userService.updateSingleUserInDb(Id, user);
-    res.status(200).json({
-      success: true,
-      message: 'User updated successfully!',
-      data: result,
-    });
+    if (result === null) {
+      res.status(200).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    } else {
+      res.status(200).json({
+        success: true,
+        message: 'User fetched successfully!',
+        data: result,
+      });
+    }
   } catch (error: any) {
     res.status(500).json({
       success: false,
@@ -84,11 +107,23 @@ const deleteSingleUser = async (req: Request, res: Response) => {
   try {
     const Id = parseInt(req.params.userId);
     const result = await userService.deleteSingleUserfromDb(Id);
-    res.status(200).json({
-      success: true,
-      message: 'User deleted successfully!',
-      data: result,
-    });
+
+    if (result.deletedCount === 0) {
+      res.status(200).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    } else {
+      res.status(200).json({
+        success: true,
+        message: 'User deleted successfully!',
+        data: null,
+      });
+    }
   } catch (error: any) {
     res.status(500).json({
       success: false,
@@ -106,11 +141,22 @@ const createOrder = async (req: Request, res: Response) => {
     const Id = parseInt(req.params.userId);
     const Order = req.body;
     const result = await userService.createOrderInUser(Id, Order);
-    res.status(200).json({
-      success: true,
-      message: 'Order created successfully!',
-      data: result,
-    });
+    if (result?._id) {
+      res.status(200).json({
+        success: true,
+        message: 'Order created successfully!',
+        data: null,
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    }
   } catch (error: any) {
     res.status(500).json({
       success: false,
@@ -123,11 +169,23 @@ const getAllOrders = async (req: Request, res: Response) => {
   try {
     const Id = parseInt(req.params.userId);
     const result = await userService.getAllOrdersfromDb(Id);
-    res.status(200).json({
-      success: true,
-      message: 'Order fetched successfully!',
-      data: result,
-    });
+
+    if (result === null) {
+      res.status(200).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    } else {
+      res.status(200).json({
+        success: true,
+        message: 'Order fetched successfully!',
+        data: result,
+      });
+    }
   } catch (error: any) {
     res.status(500).json({
       success: false,

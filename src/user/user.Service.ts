@@ -1,8 +1,13 @@
 import { UserModel } from './schema.model';
 import { User } from './user.interface';
+import userValidationSchemaByZod from './zodValidation';
 
 const createUserIntoDb = async (user: User) => {
-  const createUser = new UserModel(user);
+  // data validation using zod.
+  const zodParsingData = userValidationSchemaByZod.parse(user);
+
+  const createUser = new UserModel(zodParsingData);
+
   if (await createUser.isExists(user.userId)) {
     throw new Error('User already exists');
   } else {
@@ -67,23 +72,6 @@ const createOrderInUser = async (Id: number, Order: object) => {
     },
   ).select(['orders', '']);
   return result;
-  // .select(['orders', 'orders[-_id]']);
-  // const result = await UserModel.create(user);
-
-  // console.log('Start');
-  // console.log(getResult);
-  // console.log('End');
-
-  // if (await createOrder .isExists(Id)) {
-  //   throw new Error('User already exists');
-  // } else {
-  //   const result = await createUser.save();
-  //   return result;
-  // }
-
-  // const result = await createUser.save();
-  // console.log(result);
-  // return result;
 };
 
 const getAllOrdersfromDb = async (Id: number) => {
@@ -103,8 +91,9 @@ const getTotalPricefromDb = async (Id: number) => {
       '-_id',
     ]);
     let totalPrice = 0;
-    result?.orders.forEach((order) => {
-      totalPrice += Number(order.price) * Number(order.quantity);
+    result?.orders?.forEach((order) => {
+      totalPrice =
+        totalPrice + parseFloat(order.price) * parseFloat(order.quantity);
     });
     return totalPrice;
   }

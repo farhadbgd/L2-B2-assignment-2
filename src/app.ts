@@ -15,3 +15,29 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 export default app;
+
+// {
+//   "userId": 10,
+//   "username": "exampleUsername",
+//   "password": "examplePassword",
+//   "fullName": {
+//     "firstName": "John",
+//     "lastName": "Doe"
+//   },
+//   "age": 25,
+//   "email": "john.doe@example.com",
+//   "isActive": true,
+//   "hobbies": ["Reading", "Traveling"],
+//   "address": {
+//     "street": "123 Main Street",
+//     "city": "Cityville",
+//     "country": "Countryland"
+//   }
+// }
+
+// --------------------/100/orders/total-price
+// {
+//   "productName": "apple",
+//   "price": 15,
+//   "quantity": 20
+// }
