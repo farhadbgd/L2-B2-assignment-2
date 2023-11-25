@@ -42,19 +42,42 @@ export default app;
 //   "quantity": 20
 // }
 
-// if (result?._id) {
-//   res.status(200).json({
-//     success: true,
-//     message: 'Order created successfully!',
-//     data: null,
-//   });
-// } else {
-//   res.status(500).json({
-//     success: false,
-//     message: 'User not found',
-//     error: {
-//       code: 404,
-//       description: 'User not found!',
-//     },
-//   });
-// }
+//-----------------------------
+// const createOrderInUser = async (Id: number, Order: object) => {
+//   const createAOrder = new UserModel();
+//   if (!(await createAOrder.isExists(Id))) {
+//     throw new Error('User not found');
+//   } else {
+//     // const result = await UserModel.aggregate([
+//     //   {
+//     //     $group: {
+//     //       _id: Id,
+//     //       orders: { $push: Order },
+//     //     },
+//     //   },
+//     //   { $project: { orders: 1 } },
+
+//     // { $match: { userId: Id } },
+//     // { $addFields: { orders: [Order] } },
+//     // ]);
+
+//     const result = await UserModel.findOneAndUpdate(
+//       { userId: Id },
+//       {
+//         $push: {
+//           orders: Order,
+//         },
+//       },
+//       {
+//         new: true,
+//       },
+//     ).select(['orders', '']);
+//     return result;
+//   }
+//   // };
+//   //   const result = await UserModel.updateOne({ userId: Id }, [
+//   //     { $set: { orders: [Order] } },
+//   //   ]).select('test2');
+//   //   return result;
+//   // }
+// };

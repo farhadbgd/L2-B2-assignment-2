@@ -40,6 +40,16 @@ const getSingleUserfromDb = async (Id: number) => {
   return result;
 };
 const updateSingleUserInDb = async (Id: number, user: User) => {
+  const zodParsingData = userValidationSchemaByZod.parse(user);
+  const createUser = new UserModel(zodParsingData);
+  if (await createUser.isExists(user.userId)) {
+    throw new Error('User already exists');
+  } else {
+    const result = await createUser.save();
+    return result;
+  }
+  console.log(user);
+
   const result = await UserModel.findOneAndUpdate({ userId: Id }, user, {
     new: true,
   }).select([
@@ -60,6 +70,7 @@ const deleteSingleUserfromDb = async (Id: number) => {
 };
 
 const createOrderInUser = async (Id: number, Order: object) => {
+  console.log(Order);
   const createAOrder = new UserModel();
   if (!(await createAOrder.isExists(Id))) {
     throw new Error('User not found');
@@ -74,9 +85,15 @@ const createOrderInUser = async (Id: number, Order: object) => {
       {
         new: true,
       },
-    ).select(['orders', '']);
+    ).select(['orders']);
+
     return result;
   }
+
+  // const result = await UserModel.updateOne({ userId: Id }, [
+  //   { $set: { orders: [Order] } },
+  // ]).select('test2');
+  // return result;
 };
 
 const getAllOrdersfromDb = async (Id: number) => {

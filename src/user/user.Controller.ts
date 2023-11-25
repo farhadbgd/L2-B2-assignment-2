@@ -97,6 +97,10 @@ const updateSingleUser = async (req: Request, res: Response) => {
       });
     }
   } catch (error: any) {
+    if (error instanceof z.ZodError) {
+      res.send({ error });
+      return;
+    }
     res.status(500).json({
       success: false,
       message: 'User not found',
@@ -141,14 +145,19 @@ const deleteSingleUser = async (req: Request, res: Response) => {
 };
 
 const createOrder = async (req: Request, res: Response) => {
+  console.log('divide'); //delete
+  console.log(res); //delete
   try {
     const Id = parseInt(req.params.userId);
     const Order = req.body;
-    await userService.createOrderInUser(Id, Order);
+    const result = await userService.createOrderInUser(Id, Order);
+    console.log('divide'); //delete
+    console.log(result); //delete
     res.status(200).json({
       success: true,
       message: 'Order created successfully!',
       data: null,
+      result,
     });
   } catch (error: any) {
     res.status(500).json({
@@ -213,5 +222,3 @@ export const userControllers = {
   getAllOrders,
   getTotalPrice,
 };
-
-//   res.status(200 & 500) Need to check 200/500 will be used or not.

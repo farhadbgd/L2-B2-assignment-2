@@ -1,12 +1,13 @@
 import { Schema, model } from 'mongoose';
 import {
+  Order,
   User,
   UserInstanceMethod,
   UserInstanceMethodModel,
 } from './user.interface';
 import bcrypt from 'bcrypt';
-
 const saltRounds = 10;
+
 const UserSchema = new Schema<
   User,
   UserInstanceMethodModel,
@@ -14,7 +15,7 @@ const UserSchema = new Schema<
 >({
   userId: { type: Number, required: true, unique: true },
   username: { type: String, required: true },
-  password: { type: String, required: true },
+  password: { type: String },
   fullName: {
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
@@ -35,6 +36,7 @@ const UserSchema = new Schema<
       quantity: { type: String },
       _id: false,
     },
+    { required: false },
   ], // Need to check how to declare array of object.
 });
 
@@ -53,16 +55,10 @@ UserSchema.pre('save', async function () {
   const user = this;
   user.password = await bcrypt.hash(user.password, saltRounds);
 });
-// bcrypt pre midleware
-UserSchema.pre('save', async function () {
-  // eslint-disable-next-line @typescript-eslint/no-this-alias
-  const user = this;
-  user.password = await bcrypt.hash(user.password, saltRounds);
-});
 
 // // post midleware
 // UserSchema.post('save', function (doc, next) {
-//   doc.password = false;
+//   doc.age = 10;
 //   // onde
 //   next();
 // });
