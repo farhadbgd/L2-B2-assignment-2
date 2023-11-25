@@ -80,6 +80,7 @@ const updateSingleUser = async (req: Request, res: Response) => {
     const Id = parseInt(req.params.userId);
     const user = req.body;
     const result = await userService.updateSingleUserInDb(Id, user);
+
     if (result === null) {
       res.status(200).json({
         success: false,
@@ -145,19 +146,14 @@ const deleteSingleUser = async (req: Request, res: Response) => {
 };
 
 const createOrder = async (req: Request, res: Response) => {
-  console.log('divide'); //delete
-  console.log(res); //delete
   try {
     const Id = parseInt(req.params.userId);
     const Order = req.body;
-    const result = await userService.createOrderInUser(Id, Order);
-    console.log('divide'); //delete
-    console.log(result); //delete
+    await userService.createOrderInUser(Id, Order);
     res.status(200).json({
       success: true,
       message: 'Order created successfully!',
       data: null,
-      result,
     });
   } catch (error: any) {
     res.status(500).json({

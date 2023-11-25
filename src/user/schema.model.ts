@@ -44,7 +44,9 @@ UserSchema.methods.toJSON = function () {
   delete obj.password;
   delete obj._id;
   delete obj.__v;
-  // delete obj.orders;
+  if (this.orders?.length === 0) {
+    delete obj.orders;
+  }
   return obj;
 };
 

@@ -40,15 +40,31 @@ const getSingleUserfromDb = async (Id: number) => {
   return result;
 };
 const updateSingleUserInDb = async (Id: number, user: User) => {
-  const zodParsingData = userValidationSchemaByZod.parse(user);
-  const createUser = new UserModel(zodParsingData);
-  if (await createUser.isExists(user.userId)) {
-    throw new Error('User already exists');
-  } else {
-    const result = await createUser.save();
-    return result;
-  }
-  console.log(user);
+  // const zodParsingData = userValidationSchemaByZod.parse(user);
+  // const createUser = new UserModel(zodParsingData);
+
+  // if (await createUser.isExists(user.userId)) {
+  //   throw new Error('User already exists');
+  // } else {
+  //   const result = await UserModel.findOneAndUpdate(
+  //     { userId: Id },
+  //     createUser,
+  //     {
+  //       new: true,
+  //     },
+  //   ).select([
+  //     'userId',
+  //     'username',
+  //     'fullName',
+  //     'age',
+  //     'email',
+  //     'isActive',
+  //     'hobbies',
+  //     'address',
+  //   ]);
+
+  //   return result;
+  // }
 
   const result = await UserModel.findOneAndUpdate({ userId: Id }, user, {
     new: true,
@@ -62,6 +78,7 @@ const updateSingleUserInDb = async (Id: number, user: User) => {
     'hobbies',
     'address',
   ]);
+  console.log(result);
   return result;
 };
 const deleteSingleUserfromDb = async (Id: number) => {
