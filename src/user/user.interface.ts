@@ -3,7 +3,7 @@ import { Model } from 'mongoose';
 export type User = {
   userId: number;
   username: string;
-  password?: string;
+  password: string;
   fullName: {
     firstName: string;
     lastName: string;

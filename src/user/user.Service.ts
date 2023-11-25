@@ -70,7 +70,6 @@ const deleteSingleUserfromDb = async (Id: number) => {
 };
 
 const createOrderInUser = async (Id: number, Order: object) => {
-  console.log(Order);
   const createAOrder = new UserModel();
   if (!(await createAOrder.isExists(Id))) {
     throw new Error('User not found');
@@ -85,15 +84,10 @@ const createOrderInUser = async (Id: number, Order: object) => {
       {
         new: true,
       },
-    ).select(['orders']);
+    ).select(['orders', '-_id']);
 
     return result;
   }
-
-  // const result = await UserModel.updateOne({ userId: Id }, [
-  //   { $set: { orders: [Order] } },
-  // ]).select('test2');
-  // return result;
 };
 
 const getAllOrdersfromDb = async (Id: number) => {
@@ -143,8 +137,3 @@ export const userService = {
   getAllOrdersfromDb,
   getTotalPricefromDb,
 };
-
-// .select([
-//   'orders',
-//   '-_id',
-// ]);

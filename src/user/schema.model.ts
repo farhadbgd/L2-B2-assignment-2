@@ -1,6 +1,5 @@
 import { Schema, model } from 'mongoose';
 import {
-  Order,
   User,
   UserInstanceMethod,
   UserInstanceMethodModel,
@@ -37,7 +36,7 @@ const UserSchema = new Schema<
       _id: false,
     },
     { required: false },
-  ], // Need to check how to declare array of object.
+  ],
 });
 
 UserSchema.methods.toJSON = function () {
@@ -55,13 +54,6 @@ UserSchema.pre('save', async function () {
   const user = this;
   user.password = await bcrypt.hash(user.password, saltRounds);
 });
-
-// // post midleware
-// UserSchema.post('save', function (doc, next) {
-//   doc.age = 10;
-//   // onde
-//   next();
-// });
 
 UserSchema.methods.isExists = async function (id: number) {
   const existingUser = await UserModel.findOne({ userId: id });
